@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>/try (prototype)</title>
+    </head>
+<body>
+    <h3>/try PROTOTYPE</h3>
+<button onclick="check()">/Try</button>
+<p id="result"></p>
+
+<script>
+    function check() {
+        const results = ["Удачно", "Неудачно", "999"];
+        document.getElementById("result").textContent = results[Math.floor(Math.random() * 3)];
+
+    }
+</script>
+<p>У меня проект есть но... у меня остался дома и на моём внешнем диске, простите >_< </p>
+</body>
+</html>
