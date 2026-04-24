@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/try (web version)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="bg-image"></div>
+  <div id="bg-overlay"></div>
+
+  <div class="container">
+    <h1>/try (web version)</h1>
+    
+    <button id="btn">🎲 Попробовать</button>
+    <p id="result"></p>
+
+    <div class="settings">
+      <h2>⚙️ Настройки</h2>
+      
+      <div class="setting-group">
+        <label>📝 Заменить слова:</label>
+        <div class="word-inputs">
+          <input type="text" id="word-success" value="Удачно" placeholder="Вместо Удачно">
+          <input type="text" id="word-fail" value="Неудачно" placeholder="Вместо Неудачно">
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label for="bg-upload">🖼️ Загрузить фон:</label>
+        <input type="file" id="bg-upload" accept="image/*">
+      </div>
+
+      <div class="setting-group">
+        <label for="bg-darkness">🌑 Затемнение фона:</label>
+        <input type="range" id="bg-darkness" min="0" max="100" value="65">
+        <span class="range-value" id="darkness-value">65%</span>
+      </div>
+    </div>
+
+    <p class="description">
+      В RP (Role Play) серверах SAMP команда <code>/try</code> используется для имитации случайного исхода действия, когда результат не гарантирован и зависит от удачи.
+    </p>
+  </div>
+
+  <script>
+    const btn = document.getElementById('btn');
+    const result = document.getElementById('result');
+    const wordSuccess = document.getElementById('word-success');
+    const wordFail = document.getElementById('word-fail');
+    
+    const bgUpload = document.getElementById('bg-upload');
+    const bgImage = document.getElementById('bg-image');
+    const bgOverlay = document.getElementById('bg-overlay');
+    const bgDarkness = document.getElementById('bg-darkness');
+    const darknessValue = document.getElementById('darkness-value');
+
+    btn.addEventListener('click', () => {
+      const s = wordSuccess.value.trim() || 'Удачно';
+      const f = wordFail.value.trim() || 'Неудачно';
+      
+      const randomOutcome = Math.random() < 0.5 ? s : f;
+      result.textContent = randomOutcome;
+      
+      const isFail = randomOutcome === f;
+      result.style.color = isFail ? '	#B0C4DE' : '#9932CC';
+      result.classList.remove('pop');
+      void result.offsetWidth; 
+      result.classList.add('pop');
+    });
+
+    bgUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        bgImage.style.backgroundImage = `url(${event.target.result})`;
+        bgImage.style.opacity = '1';
+        updateDarkness();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function updateDarkness() {
+      const val = bgDarkness.value;
+      darknessValue.textContent = val + '%';
+      const alpha = val / 100;
+      bgOverlay.style.background = `rgba(0, 0, 0, ${alpha})`;
+    }
+
+    bgDarkness.addEventListener('input', updateDarkness);
+    updateDarkness(); 
+  </script>
+</body>
+</html>
